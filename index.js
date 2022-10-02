@@ -1,10 +1,17 @@
-let display = "0";
+let displayValue = "0";
+
+const currentOperationNumbers = {
+  firstNum: null,
+  secondNum: null,
+};
+
+let currentOperator = null;
 
 const operations = {
-  add: "add",
-  subtract: "subtract",
-  multiply: "multiply",
-  divide: "divide",
+  add: "+",
+  subtract: "-",
+  multiply: "x",
+  divide: "/",
 };
 
 const calculatorKeys = [
@@ -53,12 +60,12 @@ const calculatorKeys = [
     type: "number",
   },
   {
-    keyChar: "*",
+    keyChar: "x",
     type: "operator",
   },
   {
     keyChar: "C",
-    type: "operator",
+    type: "clear",
   },
   {
     keyChar: 0,
@@ -66,7 +73,7 @@ const calculatorKeys = [
   },
   {
     keyChar: "=",
-    type: "operator",
+    type: "resolve",
   },
   {
     keyChar: "/",
@@ -90,29 +97,56 @@ function divide(num1, num2) {
   return num1 / num2;
 }
 
-function operate(operation, numbersObj) {
-  switch (operation) {
+function operate(operator, numbersObj) {
+  switch (operator) {
     case operations.add: {
-      return add(numbersObj.num1, numbersObj.num2);
+      return add(numbersObj.firstNum, numbersObj.secondNum);
     }
     case operations.subtract: {
-      return subtract(numbersObj.num1, numbersObj.num2);
+      return subtract(numbersObj.firstNum, numbersObj.secondNum);
     }
     case operations.multiply: {
-      return multiply(numbersObj.num1, numbersObj.num2);
+      return multiply(numbersObj.firstNum, numbersObj.secondNum);
     }
     case operations.divide: {
-      return divide(numbersObj.num1, numbersObj.num2);
+      return divide(numbersObj.firstNum, numbersObj.secondNum);
     }
     default:
       throw new Error("operate switch error");
   }
 }
 
-function updateDisplay(string) {
-  const display = document.getElementById("calculator-display");
+function checkForInfinity(operator, numbersObj) {
+  const result = operate(operator, numbersObj);
+  if (result === Infinity) return true;
+  return false;
+}
+
+function updateMainDisplay(string) {
+  const display = document.getElementById("calculator-display-main");
 
   display.textContent = string;
+}
+
+function updateSubDisplay(subValue, operator) {
+  const subDisplay = document.getElementById("calculator-display-sub-number");
+  const operatorDisplay = document.getElementById(
+    "calculator-display-sub-operator"
+  );
+
+  subDisplay.textContent = subValue;
+  operatorDisplay.textContent = operator;
+}
+
+function clearCalculator() {
+  currentOperationNumbers.firstNum = null;
+  currentOperationNumbers.secondNum = null;
+
+  currentOperator = null;
+  displayValue = "0";
+
+  updateMainDisplay(displayValue);
+  updateSubDisplay("", "");
 }
 
 function generateCalculatorButtons() {
@@ -125,14 +159,73 @@ function generateCalculatorButtons() {
 
     if (key.type === "number") {
       button.addEventListener("click", () => {
-        if (display === "0") display = "";
-        display += key.keyChar;
-        updateDisplay(display);
+        if (displayValue === "0") displayValue = "";
+        displayValue += key.keyChar;
+        updateMainDisplay(displayValue);
+      });
+    }
+    if (key.type === "operator") {
+      button.addEventListener("click", () => {
+        if (currentOperationNumbers.firstNum) {
+          currentOperationNumbers.secondNum = Number(displayValue);
+          const result = operate(currentOperator, currentOperationNumbers);
+
+          console.log(currentOperationNumbers, currentOperator, result);
+
+          currentOperationNumbers.firstNum = result;
+          currentOperationNumbers.secondNum = null;
+
+          displayValue = "0";
+          currentOperator = key.keyChar;
+
+          updateMainDisplay(displayValue);
+          updateSubDisplay(currentOperationNumbers.firstNum, currentOperator);
+        } else {
+          currentOperationNumbers.firstNum = Number(displayValue);
+          currentOperator = key.keyChar;
+
+          displayValue = "0";
+
+          updateMainDisplay(displayValue);
+          updateSubDisplay(currentOperationNumbers.firstNum, currentOperator);
+        }
+      });
+    }
+    if (key.type === "clear") {
+      button.addEventListener("click", () => {
+        clearCalculator();
+      });
+    }
+
+    if (key.type === "resolve") {
+      button.addEventListener("click", () => {
+        if (!currentOperationNumbers.firstNum && !currentOperator) return;
+        if (
+          checkForInfinity(currentOperator, {
+            firstNum: currentOperationNumbers.firstNum,
+            secondNum: Number(displayValue),
+          })
+        ) {
+          alert("DO NOT DIVIDE BY ZERO!!!!!!!!");
+          clearCalculator();
+          return;
+        }
+        currentOperationNumbers.secondNum = Number(displayValue);
+
+        const result = operate(currentOperator, currentOperationNumbers);
+
+        displayValue = result;
+
+        currentOperationNumbers.firstNum = null;
+        currentOperationNumbers.secondNum = null;
+        currentOperator = null;
+
+        updateMainDisplay(displayValue);
+        updateSubDisplay("", "");
       });
     }
 
     calculatorButtonsContainer.appendChild(button);
   });
 }
-
 generateCalculatorButtons();

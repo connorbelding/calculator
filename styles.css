@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+body {
+  background: #111;
+}
+
 #calculator-container {
   border: 2px solid black;
   display: flex;
@@ -15,12 +19,43 @@
 #calculator-display {
   flex: 0 0 auto;
   width: 100%;
+  display: grid;
+  grid-template-rows: auto auto;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    "main main"
+    "sub operator";
+
   background: #cac;
+}
+
+#calculator-display-main {
+  grid-area: main;
   display: flex;
   justify-content: flex-end;
   align-items: center;
   font-size: 34px;
   padding: 5px 10px;
+}
+#calculator-display-sub-number,
+#calculator-display-sub-operator {
+  font-size: 16px;
+  border-top: 2px solid rgba(0, 0, 0, 0.3);
+  padding: 0 10px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+}
+
+#calculator-display-sub-number {
+  grid-area: sub;
+  justify-content: flex-end;
+}
+
+#calculator-display-sub-operator {
+  grid-area: operator;
+  border-left: 2px solid rgba(0, 0, 0, 0.3);
+  justify-content: center;
 }
 
 #calculator-buttons {

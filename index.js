@@ -149,6 +149,10 @@ function clearCalculator() {
   updateSubDisplay("", "");
 }
 
+function roundResult(num) {
+  return Number(num.toFixed(4));
+}
+
 function generateCalculatorButtons() {
   const calculatorButtonsContainer =
     document.getElementById("calculator-buttons");
@@ -168,7 +172,9 @@ function generateCalculatorButtons() {
       button.addEventListener("click", () => {
         if (currentOperationNumbers.firstNum) {
           currentOperationNumbers.secondNum = Number(displayValue);
-          const result = operate(currentOperator, currentOperationNumbers);
+          const result = roundResult(
+            operate(currentOperator, currentOperationNumbers)
+          );
 
           console.log(currentOperationNumbers, currentOperator, result);
 
@@ -212,7 +218,9 @@ function generateCalculatorButtons() {
         }
         currentOperationNumbers.secondNum = Number(displayValue);
 
-        const result = operate(currentOperator, currentOperationNumbers);
+        const result = roundResult(
+          operate(currentOperator, currentOperationNumbers)
+        );
 
         displayValue = result;
 
@@ -228,4 +236,5 @@ function generateCalculatorButtons() {
     calculatorButtonsContainer.appendChild(button);
   });
 }
+
 generateCalculatorButtons();

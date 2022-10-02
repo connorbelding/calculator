@@ -1,3 +1,5 @@
+let display = "0";
+
 const operations = {
   add: "add",
   subtract: "subtract",
@@ -107,6 +109,12 @@ function operate(operation, numbersObj) {
   }
 }
 
+function updateDisplay(string) {
+  const display = document.getElementById("calculator-display");
+
+  display.textContent = string;
+}
+
 function generateCalculatorButtons() {
   const calculatorButtonsContainer =
     document.getElementById("calculator-buttons");
@@ -114,9 +122,15 @@ function generateCalculatorButtons() {
   calculatorKeys.forEach((key) => {
     const button = document.createElement("button");
     button.textContent = key.keyChar;
-    button.addEventListener("pointerdown", () => {
-      console.log(key.keyChar);
-    });
+
+    if (key.type === "number") {
+      button.addEventListener("click", () => {
+        if (display === "0") display = "";
+        display += key.keyChar;
+        updateDisplay(display);
+      });
+    }
+
     calculatorButtonsContainer.appendChild(button);
   });
 }

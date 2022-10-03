@@ -6,6 +6,15 @@
   font-family: "Asap Condensed", sans-serif;
 }
 
+:root {
+  --black: #111;
+  --white: #f4f4f4;
+  --darkblue: #1c2763;
+  --lightblue: #3370b6;
+  --red: #e43626;
+  --grey: #ada8b6;
+}
+
 body {
   background: #cac;
   display: flex;
@@ -43,16 +52,19 @@ body {
   align-items: center;
   font-size: 34px;
   padding: 5px 10px;
-  background: #ddd;
+  background: var(--white);
+  color: var(--black);
 }
 #calculator-display-sub-number,
 #calculator-display-sub-operator {
   font-size: 16px;
+  background: var(--grey);
   border-bottom: 2px solid rgba(0, 0, 0, 0.3);
   padding: 0 10px;
   height: 30px;
   display: flex;
   align-items: center;
+  color: var(--black);
 }
 
 #calculator-display-sub-number {
@@ -77,8 +89,6 @@ body {
   border-radius: 0;
   border: none;
   outline: none;
-  background: #1c2763;
-  color: #fff;
 }
 
 #calculator-buttons button:hover {
@@ -90,9 +100,22 @@ body {
 }
 
 .operator {
-  background: #ffd166;
+  background: var(--lightblue);
+  color: var(--white);
+}
+
+.number,
+.decimal {
+  background: var(--darkblue);
+  color: var(--white);
 }
 
 .clear {
-  background: #fe5f55;
+  background: var(--red);
+  color: var(--darkblue);
+}
+
+.resolve {
+  background: #ada8b6;
+  color: #111;
 }

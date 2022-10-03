@@ -54,6 +54,9 @@ body {
   padding: 5px 10px;
   background: var(--white);
   color: var(--black);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 #calculator-display-sub-number,
 #calculator-display-sub-operator {
@@ -69,6 +72,9 @@ body {
 #calculator-display-sub-number {
   grid-area: sub;
   justify-content: flex-end;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 #calculator-display-sub-operator {

@@ -16,15 +16,15 @@ const operations = {
 
 const calculatorKeys = [
   {
-    keyChar: 1,
+    keyChar: 7,
     type: "number",
   },
   {
-    keyChar: 2,
+    keyChar: 8,
     type: "number",
   },
   {
-    keyChar: 3,
+    keyChar: 9,
     type: "number",
   },
   {
@@ -48,15 +48,15 @@ const calculatorKeys = [
     type: "operator",
   },
   {
-    keyChar: 7,
+    keyChar: 1,
     type: "number",
   },
   {
-    keyChar: 8,
+    keyChar: 2,
     type: "number",
   },
   {
-    keyChar: 9,
+    keyChar: 3,
     type: "number",
   },
   {
@@ -64,20 +64,24 @@ const calculatorKeys = [
     type: "operator",
   },
   {
-    keyChar: "C",
-    type: "clear",
+    keyChar: ".",
+    type: "decimal",
   },
   {
     keyChar: 0,
     type: "number",
   },
   {
-    keyChar: "=",
-    type: "resolve",
+    keyChar: "C",
+    type: "clear",
   },
   {
     keyChar: "/",
     type: "operator",
+  },
+  {
+    keyChar: "=",
+    type: "resolve",
   },
 ];
 
@@ -162,6 +166,7 @@ function generateCalculatorButtons() {
     button.textContent = key.keyChar;
 
     if (key.type === "number") {
+      button.classList.add("number");
       button.addEventListener("click", () => {
         if (displayValue === "0") displayValue = "";
         displayValue += key.keyChar;
@@ -169,6 +174,7 @@ function generateCalculatorButtons() {
       });
     }
     if (key.type === "operator") {
+      button.classList.add("operator");
       button.addEventListener("click", () => {
         if (currentOperationNumbers.firstNum) {
           currentOperationNumbers.secondNum = Number(displayValue);
@@ -197,13 +203,20 @@ function generateCalculatorButtons() {
         }
       });
     }
+
+    if (key.type === "decimal") {
+      button.classList.add("decimal");
+    }
+
     if (key.type === "clear") {
+      button.classList.add("clear");
       button.addEventListener("click", () => {
         clearCalculator();
       });
     }
 
     if (key.type === "resolve") {
+      button.classList.add("resolve");
       button.addEventListener("click", () => {
         if (!currentOperationNumbers.firstNum && !currentOperator) return;
         if (

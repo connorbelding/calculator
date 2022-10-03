@@ -157,6 +157,10 @@ function roundResult(num) {
   return Number(num.toFixed(4));
 }
 
+function checkForDecimal(string) {
+  return string.includes(".");
+}
+
 function generateCalculatorButtons() {
   const calculatorButtonsContainer =
     document.getElementById("calculator-buttons");
@@ -206,6 +210,12 @@ function generateCalculatorButtons() {
 
     if (key.type === "decimal") {
       button.classList.add("decimal");
+      button.addEventListener("click", () => {
+        if (!checkForDecimal(displayValue)) {
+          displayValue += ".";
+          updateMainDisplay(displayValue);
+        }
+      });
     }
 
     if (key.type === "clear") {

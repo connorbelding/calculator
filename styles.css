@@ -133,7 +133,7 @@ body {
 }
 
 .backspace {
-  background: green;
-  color: black;
+  background: var(--black);
+  color: var(--grey);
   flex: 0 0 25%;
 }

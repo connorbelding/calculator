@@ -1,11 +1,7 @@
 let displayValue = "0";
 
-const currentOperationNumbers = {
-  firstNum: null,
-  secondNum: null,
-};
-
-let currentOperator = null;
+let storedNumber = null;
+let storedOperator = null;
 
 const operations = {
   add: "+",
@@ -154,7 +150,7 @@ function clearCalculator() {
 }
 
 function roundResult(num) {
-  return Number(num.toFixed(4));
+  return Number(num.toFixed(6));
 }
 
 function checkForDecimal(string) {
@@ -168,7 +164,6 @@ function generateCalculatorButtons() {
   calculatorKeys.forEach((key) => {
     const button = document.createElement("button");
     button.textContent = key.keyChar;
-
     if (key.type === "number") {
       button.classList.add("number");
       button.addEventListener("click", () => {
@@ -177,37 +172,39 @@ function generateCalculatorButtons() {
         updateMainDisplay(displayValue);
       });
     }
+    /////////////////////
+
     if (key.type === "operator") {
       button.classList.add("operator");
       button.addEventListener("click", () => {
-        if (currentOperationNumbers.firstNum) {
-          currentOperationNumbers.secondNum = Number(displayValue);
+        if (storedOperator) {
+          const currentNumber = Number(displayValue);
           const result = roundResult(
-            operate(currentOperator, currentOperationNumbers)
+            operate(storedOperator, {
+              firstNum: storedNumber,
+              secondNum: currentNumber,
+            })
           );
 
-          console.log(currentOperationNumbers, currentOperator, result);
-
-          currentOperationNumbers.firstNum = result;
-          currentOperationNumbers.secondNum = null;
+          storedNumber = result;
+          storedOperator = key.keyChar;
 
           displayValue = "0";
-          currentOperator = key.keyChar;
-
           updateMainDisplay(displayValue);
-          updateSubDisplay(currentOperationNumbers.firstNum, currentOperator);
+          updateSubDisplay(storedNumber, storedOperator);
         } else {
-          currentOperationNumbers.firstNum = Number(displayValue);
-          currentOperator = key.keyChar;
+          storedOperator = key.keyChar;
+          storedNumber = Number(displayValue);
 
           displayValue = "0";
 
           updateMainDisplay(displayValue);
-          updateSubDisplay(currentOperationNumbers.firstNum, currentOperator);
+          updateSubDisplay(storedNumber, storedOperator);
         }
       });
     }
 
+    //////////////////////
     if (key.type === "decimal") {
       button.classList.add("decimal");
       button.addEventListener("click", () => {
@@ -217,39 +214,36 @@ function generateCalculatorButtons() {
         }
       });
     }
-
-    if (key.type === "clear") {
-      button.classList.add("clear");
-      button.addEventListener("click", () => {
-        clearCalculator();
-      });
-    }
-
+    //////////////////////
     if (key.type === "resolve") {
       button.classList.add("resolve");
       button.addEventListener("click", () => {
-        if (!currentOperationNumbers.firstNum && !currentOperator) return;
-        if (
-          checkForInfinity(currentOperator, {
-            firstNum: currentOperationNumbers.firstNum,
-            secondNum: Number(displayValue),
-          })
-        ) {
-          alert("DO NOT DIVIDE BY ZERO!!!!!!!!");
-          clearCalculator();
-          return;
-        }
-        currentOperationNumbers.secondNum = Number(displayValue);
+        if (!storedOperator) return;
 
+        const currentNumber = Number(displayValue);
         const result = roundResult(
-          operate(currentOperator, currentOperationNumbers)
+          operate(storedOperator, {
+            firstNum: storedNumber,
+            secondNum: currentNumber,
+          })
         );
 
-        displayValue = result;
+        displayValue = String(result);
 
-        currentOperationNumbers.firstNum = null;
-        currentOperationNumbers.secondNum = null;
-        currentOperator = null;
+        storedOperator = null;
+        storedNumber = null;
+
+        updateMainDisplay(displayValue);
+        updateSubDisplay("", "");
+      });
+    }
+    ////////////////////
+    if (key.type === "clear") {
+      button.classList.add("clear");
+      button.addEventListener("click", () => {
+        storedNumber = null;
+        storedOperator = null;
+        displayValue = "0";
 
         updateMainDisplay(displayValue);
         updateSubDisplay("", "");

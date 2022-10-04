@@ -272,4 +272,5 @@ function generateCalculatorButtons() {
   });
 }
 
+updateMainDisplay(displayValue);
 generateCalculatorButtons();

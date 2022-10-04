@@ -1,1 +1,5 @@
 # calculator
+
+This is a calculator made with JS, HTML, and CSS.  This project requires logical thinking in order to find a proper way to handle the functions of a calculator.  It's pretty easy to do a single calculation using the = key but stringing operations together without using the = key is a bit more challenging.  I had to go back and rewrite a lot of the logic because I realized the current way I was writing the logic was not optimal.
+
+Styling the calculator can also be challenging.  I used flexbox with flex-wrap to create the rows and columns for the buttons.  The bottom row is unique because I wanted the = key to take up 3 columns of the row while the ← key should only take up a single column.  This involves changing the flex-grow value on the ← key to prevent it from stealing more space than it needs.

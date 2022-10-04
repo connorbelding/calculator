@@ -79,6 +79,11 @@ const calculatorKeys = [
     keyChar: "=",
     type: "resolve",
   },
+  ,
+  {
+    keyChar: "←",
+    type: "backspace",
+  },
 ];
 
 function add(num1, num2) {
@@ -247,6 +252,19 @@ function generateCalculatorButtons() {
 
         updateMainDisplay(displayValue);
         updateSubDisplay("", "");
+      });
+    }
+
+    if (key.type === "backspace") {
+      button.classList.add("backspace");
+      button.addEventListener("click", () => {
+        if (displayValue.length === 1) {
+          displayValue = "0";
+        } else {
+          displayValue = displayValue.slice(0, displayValue.length - 1);
+        }
+
+        updateMainDisplay(displayValue);
       });
     }
 
